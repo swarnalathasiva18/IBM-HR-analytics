@@ -1,1 +1,55 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+
+df = pd.read_csv('WA_Fn-UseC_-HR-Employee-Attrition.csv')
+df.head()
+df.info()
+df.describe()
+df['Attrition'].value_counts()
+
+sns.countplot(data=df, x='Department', hue='Attrition')
+plt.title("Attrition by Department")
+
+sns.countplot(data=df, x='JobRole', hue='Attrition')
+plt.xticks(rotation=45)
+plt.title("Attrition by Job Role")
+
+sns.countplot(data=df, x='Gender', hue='Attrition')
+plt.title("Attrition by Gender")
+
+# Convert categorical 'Attrition' to binary
+df['Attrition_Flag'] = df['Attrition'].apply(lambda x: 1 if x == 'Yes' else 0)
+
+# Heatmap of correlations
+plt.figure(figsize=(12, 8))
+sns.heatmap(df.corr(numeric_only=True), annot=True, fmt=".2f", cmap='coolwarm')
+plt.title("Correlation Heatmap")
+
+sns.boxplot(data=df, x='Attrition', y='MonthlyIncome')
+plt.title("Attrition vs Monthly Income")
+
+sns.boxplot(data=df, x='Attrition', y='YearsAtCompany')
+plt.title("Attrition vs Years at Company")
+# Encode categorical variables
+df_encoded = pd.get_dummies(df.drop(['Attrition'], axis=1), drop_first=True)
+
+X = df_encoded.drop('Attrition_Flag', axis=1)
+y = df_encoded['Attrition_Flag']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print(classification_report(y_test, y_pred))
+sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d')
+
 
