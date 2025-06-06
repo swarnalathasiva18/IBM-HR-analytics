@@ -44,7 +44,7 @@ High employee attrition can disrupt business continuity, incur recruitment costs
   - Box plots for income and tenure comparison  
   - Correlation heatmaps for numeric features
 
-- 🤖 **(Optional) Predictive Modeling**  
+- 🤖 **Predictive Modeling**  
   A Random Forest classifier is built to predict attrition with good accuracy, showing potential business application.
 
 - 📌 **Business Insights**  
